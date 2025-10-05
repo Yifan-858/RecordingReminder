@@ -59,15 +59,15 @@ async def post_reminder(ctx):
   await ctx.send("Has the lession started? Remind Robin to record.", view=view)
   
 CLASS_CHANNEL_ID = 1412418474751430798 # change to class channel later
-#CLASS_CHANNEL_ID = 1409835563275653142 # class channel
+#CLASS_CHANNEL_ID = 1409835563275653142 # class allmänt channel
 
-POST_HOUR = 17
-POST_MINUTE = 29 
+# POST_HOUR = 17
+# POST_MINUTE = 29 
 
 
 sweden_timezone = ZoneInfo("Europe/Stockholm")
-# POST_HOUR = 9                          #set hour
-# POST_MINUTE = 10                        #set mintue
+POST_HOUR = 9                          #set hour
+POST_MINUTE = 10                        #set mintue
                       
 
 @tasks.loop(minutes=0.2) # testing, change the minutes later
