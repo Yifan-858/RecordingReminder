@@ -66,8 +66,8 @@ CLASS_CHANNEL_ID = 1412418474751430798 # change to class channel later
 
 
 sweden_timezone = ZoneInfo("Europe/Stockholm")
-POST_HOUR = 15                          #set hour
-POST_MINUTE = 10                        #set mintue
+POST_HOUR = 23                          #set hour
+POST_MINUTE = 1                        #set mintue
                       
 
 @tasks.loop(minutes=0.2) # testing, change the minutes later
