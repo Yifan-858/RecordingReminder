@@ -66,7 +66,7 @@ CLASS_CHANNEL_ID = 1412418474751430798 # change to class channel later
 
 
 sweden_timezone = ZoneInfo("Europe/Stockholm")
-POST_HOUR = 9                          #set hour
+POST_HOUR = 15                          #set hour
 POST_MINUTE = 10                        #set mintue
                       
 
