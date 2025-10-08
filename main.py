@@ -84,21 +84,21 @@ async def scheduled_reminder():
         print("Posting scheduled reminder!")
         
         #Testing if class channel exists
+        channel_to_sent = []
+        
+        testing_channel = bot.get_channel(TESTING_CHANNEL_ID)
+        if testing_channel:
+          channel_to_sent.append(testing_channel)
+        
         class_channel = bot.get_channel(CLASS_CHANNEL_ID)
         if class_channel:
-          channel_ids = [TESTING_CHANNEL_ID, CLASS_CHANNEL_ID]
-        else:
-          channel_ids = [TESTING_CHANNEL_ID]
+          channel_to_sent.append(class_channel)
           
         reminder_view = ReminderView()
         
-        for channel_id in channel_ids:
-          channel = bot.get_channel(channel_id)
-          if channel:
+        for channel in channel_to_sent:
               await channel.send("Has the lession started? Remind Robin to record.", view=reminder_view)
-          else:
-                print("Channel not found!")
-                
+          
         scheduled_reminder_sent = True # improve input with 2 buttons y/n
         break;
               
