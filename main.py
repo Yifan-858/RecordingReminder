@@ -49,7 +49,7 @@ class ReminderView(View):
       await interaction.response.edit_message(view = self)
       
       fact = get_fun_fact()
-      await interaction.followup.send(f"Recording started. A fun fact for today: {fact}", ephemeral=False)
+      await interaction.followup.send(f"Robin is reminded. A fun fact for today: {fact}", ephemeral=False)
 
 #Testing
 @bot.command()
@@ -58,16 +58,12 @@ async def post_reminder(ctx):
   view = ReminderView()
   await ctx.send("Has the lession started? Remind Robin to record.", view=view)
   
-CLASS_CHANNEL_ID = 1412418474751430798 # change to class channel later
-#CLASS_CHANNEL_ID = 1409835563275653142 # class allmänt channel
-
-# POST_HOUR = 17
-# POST_MINUTE = 29 
+TESTING_CHANNEL_ID = 1412418474751430798 # private testing channel 
+CLASS_CHANNEL_ID = 1409835563275653142 # class allmänt channel 
 
 
 sweden_timezone = ZoneInfo("Europe/Stockholm")
-POST_HOUR = 16                          #set hour
-POST_MINUTE = 50                    #set mintue
+POST_TIMES = [(9, 15), (13, 10)]
                       
 
 @tasks.loop(minutes=0.2) # testing, change the minutes later
@@ -78,25 +74,38 @@ async def scheduled_reminder():
     global reminder_view
     
     now_local = datetime.now(sweden_timezone)
-    weekday = now_local.weekday()
+    # weekday = now_local.weekday()
     
     # if weekday in [1, 3]:
     print(f"Checking time: {now_local.hour}:{now_local.minute}")
     
-    if not scheduled_reminder_sent and now_local.hour == POST_HOUR and now_local.minute == POST_MINUTE:
-      print("Posting scheduled reminder!")
-      channel = bot.get_channel(CLASS_CHANNEL_ID)
-      if channel:
-          reminder_view = ReminderView()
-          reminder_message = await channel.send("Has the lession started? Remind Robin to record.", view=reminder_view)
-          scheduled_reminder_sent = True # improve input with 2 buttons y/n
-      else:
-            print("Channel not found!")
-            
-    elif scheduled_reminder_sent and reminder_active:
-      if reminder_message: 
-        await reminder_message.edit(content = "Maybe now ⏰? Remind Robin to record.", view= reminder_view)
-        print("Reminder reposted!")
+    for hour, minute in POST_TIMES:
+      if not scheduled_reminder_sent and now_local.hour == hour and now_local.minute == minute:
+        print("Posting scheduled reminder!")
+        
+        #Testing if class channel exists
+        class_channel = bot.get_channel(CLASS_CHANNEL_ID)
+        if class_channel:
+          channel_ids = [TESTING_CHANNEL_ID, CLASS_CHANNEL_ID]
+        else:
+          channel_ids = [TESTING_CHANNEL_ID]
+          
+        reminder_view = ReminderView()
+        
+        for channel_id in channel_ids:
+          channel = bot.get_channel(channel_id)
+          if channel:
+              await channel.send("Has the lession started? Remind Robin to record.", view=reminder_view)
+          else:
+                print("Channel not found!")
+                
+        scheduled_reminder_sent = True # improve input with 2 buttons y/n
+        break;
+              
+      # elif scheduled_reminder_sent and reminder_active:
+      #   if reminder_message: 
+      #     await reminder_message.edit(content = "Maybe now ⏰? Remind Robin to record.", view= reminder_view)
+      #     print("Reminder reposted!")
           
 @bot.event
 async def on_ready():
